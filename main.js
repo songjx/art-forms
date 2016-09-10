@@ -11,17 +11,6 @@ var arrays = {
 };
 var bufferInfo = twgl.createBufferInfoFromArrays(gl, arrays);
 
-var tex = twgl.createTexture(gl, {
-    min: gl.NEAREST,
-    mag: gl.NEAREST,
-    src: [
-    255, 255, 255, 255,
-    192, 192, 192, 255,
-    192, 192, 192, 255,
-    255, 255, 255, 255,
-    ],
-});
-
 var uniforms = {
     u_lightWorldPos: [1, 8, -10],
     u_lightColor: [1, 0.8, 0.8, 1],
@@ -29,7 +18,6 @@ var uniforms = {
     u_specular: [1, 1, 1, 1],
     u_shininess: 50,
     u_specularFactor: 1,
-    u_diffuse: tex,
 };
 
 function render(time) {
