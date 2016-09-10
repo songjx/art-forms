@@ -4,11 +4,85 @@ var m4 = twgl.m4;
 var gl = twgl.getWebGLContext(document.getElementById("c"));
 var programInfo = twgl.createProgramInfo(gl, ["vs", "fs"]);
 
+class TriangleMesh {
+  constructor(nodes, edges, triangles) {
+    this.nodes = nodes;
+    this.edges = edges;
+    this.triangles = triangles;
+  }
+
+  getArrays() {
+    let position = [];
+    for (let i = 0; i < this.nodes.length; i++) {
+      let node = this.nodes[i];
+      position.push(node.x, node.y, node.z);
+    }
+    let indices = [];
+    for (let i = 0; i < this.triangles.length; i++) {
+      let triangle = this.triangles[i];
+      indices.push(triangle.na, triangle.nb, triangle.nc);
+    }
+    let normal = position;
+    return {
+      position: position,
+      normal: normal,
+      indices: indices,
+    };
+  }
+}
+
+class Node {
+  constructor(x, y, z) {
+    this.x = x;
+    this.y = y;
+    this.z = z;
+  }
+}
+
+class Edge {
+  constructor(na, nb) {
+    this.na = na;
+    this.nb = nb;
+  }
+}
+
+class Triangle {
+  constructor(na, nb, nc) {
+    this.na = na;
+    this.nb = nb;
+    this.nc = nc;
+  }
+}
+
+function makeTetrahedron() {
+  let nodes = [
+    new Node(+1, +1, +1),
+    new Node(-1, -1, +1),
+    new Node(+1, -1, -1),
+    new Node(-1, +1, -1),
+  ];
+  let edges = [];
+  let triangles = [
+    new Triangle(0, 1, 2),
+    new Triangle(0, 3, 1),
+    new Triangle(1, 3, 2),
+    new Triangle(0, 2, 3),
+  ];
+  return new TriangleMesh(nodes, edges, triangles);
+}
+
+var mesh = makeTetrahedron();
+
+var arrays = mesh.getArrays();
+
+/*
 var arrays = {
     position: [1, 1, -1, 1, 1, 1, 1, -1, 1, 1, -1, -1, -1, 1, 1, -1, 1, -1, -1, -1, -1, -1, -1, 1, -1, 1, 1, 1, 1, 1, 1, 1, -1, -1, 1, -1, -1, -1, -1, 1, -1, -1, 1, -1, 1, -1, -1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, -1, 1, -1, 1, 1, -1, 1, -1, -1, -1, -1, -1],
     normal:   [1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1],
     indices:  [0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, 8, 9, 10, 8, 10, 11, 12, 13, 14, 12, 14, 15, 16, 17, 18, 16, 18, 19, 20, 21, 22, 20, 22, 23],
 };
+*/
+
 var bufferInfo = twgl.createBufferInfoFromArrays(gl, arrays);
 
 var uniforms = {
