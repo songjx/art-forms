@@ -15,7 +15,7 @@ class TriangleMesh {
     let position = [];
     for (let i = 0; i < this.nodes.length; i++) {
       let node = this.nodes[i];
-      position.push(node.x, node.y, node.z);
+      position.push(node.pos[0], node.pos[1], node.pos[2]);
     }
     let indices = [];
     for (let i = 0; i < this.triangles.length; i++) {
@@ -33,9 +33,7 @@ class TriangleMesh {
 
 class Node {
   constructor(x, y, z) {
-    this.x = x;
-    this.y = y;
-    this.z = z;
+    this.pos = vec3.fromValues(x, y, z);
   }
 }
 
