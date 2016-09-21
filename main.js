@@ -3,6 +3,13 @@ twgl.setDefaults({attribPrefix: "a_"});
 var m4 = twgl.m4;
 var gl = twgl.getWebGLContext(document.getElementById("c"));
 var programInfo = twgl.createProgramInfo(gl, ["vs", "fs"]);
+var orientation = quat.create();
+
+function quatToM4(quat) {
+  var rot = mat4.create();
+  mat4.fromQuat(quat, rot);
+  return m4.copy(rot);
+}
 
 class TriangleMesh {
   constructor(nodes, edges, triangles) {
@@ -111,7 +118,7 @@ function render(time) {
     var camera = m4.lookAt(eye, target, up);
     var view = m4.inverse(camera);
     var viewProjection = m4.multiply(view, projection);
-    var world = m4.rotationY(time);
+    var world = quatToM4(orientation);
 
     uniforms.u_viewInverse = camera;
     uniforms.u_world = world;
