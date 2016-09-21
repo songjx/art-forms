@@ -13,20 +13,31 @@ class TriangleMesh {
 
   getArrays() {
     let position = [];
+    /*
     for (let i = 0; i < this.nodes.length; i++) {
       let node = this.nodes[i];
       position.push(node.pos[0], node.pos[1], node.pos[2]);
     }
-    let indices = [];
+    */
+    let normal = [];
     for (let i = 0; i < this.triangles.length; i++) {
       let triangle = this.triangles[i];
-      indices.push(triangle.na, triangle.nb, triangle.nc);
+      let a = this.nodes[triangle.na].pos;
+      let b = this.nodes[triangle.nb].pos;
+      let c = this.nodes[triangle.nc].pos;
+      position.push(a[0], a[1], a[2]);
+      position.push(b[0], b[1], b[2]);
+      position.push(c[0], c[1], c[2]);
+      let ba = vec3.sub(vec3.create(), b, a);
+      let ca = vec3.sub(vec3.create(), c, a);
+      let n = vec3.cross(vec3.create(), ba, ca);
+      normal.push(n[0], n[1], n[2]);
+      normal.push(n[0], n[1], n[2]);
+      normal.push(n[0], n[1], n[2]);
     }
-    let normal = position;
     return {
       position: position,
       normal: normal,
-      indices: indices,
     };
   }
 }
